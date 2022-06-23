@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://example.com/" name="MyWS"
+             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://example.com/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+        <xs:schema version="1.0" targetNamespace="http://example.com/"
+                   xmlns:tns="http://example.com/"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="payAccount" type="tns:payAccount"/>
+            <xs:element name="payAccountResponse" type="tns:payAccountResponse"/>
+
+            <xs:complexType name="payAccount">
+            </xs:complexType>
+            <xs:complexType name="payAccountResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="tns:paymentResponse" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="paymentResponse">
+            </xs:complexType>
+        </xs:schema>
+    </types>
+
+    <message name="payAccount">
+        <part name="parameters" element="tns:payAccount"/>
+    </message>
+    <message name="payAccountResponse">
+        <part name="parameters" element="tns:payAccountResponse"/>
+    </message>
+    <portType name="MyWS">
+        <operation name="payAccount">
+            <input wsam:Action="http://example.com/MyWS/payAccountRequest" message="tns:payAccount"/>
+            <output wsam:Action="http://example.com/MyWS/payAccountResponse"
+                    message="tns:payAccountResponse"/>
+        </operation>
+    </portType>
+    <binding name="MyWSPortBinding" type="tns:MyWS">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+
+        <operation name="payAccount">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="MyWS">
+        <port name="MyWSPort" binding="tns:MyWSPortBinding">
+            <soap:address location="http://example.com/ExampleWS/MyWS"/>
+        </port>
+    </service>
+</definitions>
